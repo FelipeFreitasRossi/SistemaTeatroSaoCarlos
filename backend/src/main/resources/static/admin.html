@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Teatro Municipal</title>
+    <style>
+        /* ========== RESET & TEMA ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0B0B0B;
+            color: #F5F5F5;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* ========== LAYOUT PRINCIPAL ========== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ========== HEADER ========== */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .header h1 span {
+            color: #888;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .badge-status {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #aaa;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* ========== BOTÕES ========== */
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #0B0B0B;
+        }
+        .btn-primary:hover {
+            background: #dddddd;
+            transform: scale(1.02);
+        }
+
+        .btn-success {
+            background: #2b7a4b;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #1f5f39;
+        }
+
+        .btn-warning {
+            background: #b8860b;
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #9a7109;
+        }
+
+        .btn-danger {
+            background: #b22222;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #8b1a1a;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ccc;
+        }
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 12px;
+        }
+
+        /* ========== TABELA ========== */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(4px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            text-align: left;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            color: #aaa;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .status-breve {
+            background: rgba(255, 255, 255, 0.1);
+            color: #aaa;
+        }
+        .status-cartaz {
+            background: rgba(255, 215, 0, 0.15);
+            color: #e8c766;
+        }
+        .status-encerrado {
+            background: rgba(100, 100, 100, 0.2);
+            color: #888;
+        }
+        .status-cancelado {
+            background: rgba(200, 50, 50, 0.15);
+            color: #e06666;
+        }
+
+        .img-thumb {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: #222;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .text-truncate {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        /* ========== MODAL ========== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(6px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #141414;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            max-width: 540px;
+            width: 100%;
+            padding: 32px 28px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            animation: fadeUp 0.3s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            margin-bottom: 6px;
+            color: #fff;
+        }
+        .modal-box .sub {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #aaa;
+            margin-bottom: 4px;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            background: #0B0B0B;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: #f5f5f5;
+            font-size: 14px;
+            transition: border 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
+        }
+
+        /* ========== TOAST ========== */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 14px 22px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            animation: slideIn 0.3s ease;
+            min-width: 200px;
+            backdrop-filter: blur(6px);
+        }
+        .toast.success {
+            border-left: 4px solid #2b7a4b;
+        }
+        .toast.error {
+            border-left: 4px solid #b22222;
+        }
+        .toast.info {
+            border-left: 4px solid #b8860b;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ========== LOADING ========== */
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .loading-spinner::after {
+            content: '...';
+            animation: dots 1.2s steps(4, end) infinite;
+        }
+        @keyframes dots {
+            0% {
+                content: '';
+            }
+            25% {
+                content: '.';
+            }
+            50% {
+                content: '..';
+            }
+            75% {
+                content: '...';
+            }
+        }
+
+        /* ========== TELA DE LOGIN ========== */
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #0B0B0B;
+        }
+        .login-box {
+            background: #141414;
+            padding: 40px 32px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+        .login-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+        .login-box p {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            background: #0B0B0B;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+        .login-box input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .login-box .btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: 4px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ========== RESPONSIVO ========== */
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .modal-box {
+                padding: 24px 16px;
+            }
+            .actions-cell {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .text-truncate {
+                max-width: 120px;
+            }
+            .toast-container {
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== TELA DE LOGIN ========== -->
+<div id="loginScreen" class="login-screen">
+    <div class="login-box">
+        <h2>🎭 Painel Admin</h2>
+        <p>Digite suas credenciais para acessar</p>
+        <form id="loginForm" onsubmit="return fazerLogin(event)">
+            <input type="text" id="loginUser" placeholder="Usuário" value="admin" required>
+            <input type="password" id="loginPass" placeholder="Senha" value="admin123" required>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+        <p style="margin-top: 16px; font-size: 12px; color: #555;">Padrão: admin / admin123</p>
+    </div>
+</div>
+
+<!-- ========== PAINEL PRINCIPAL ========== -->
+<div id="appContainer" class="container hidden">
+
+    <!-- Cabeçalho -->
+    <div class="header">
+        <h1>🎭 Teatro<span>Municipal</span></h1>
+        <div class="header-actions">
+            <span class="badge-status">🔐 Admin</span>
+            <button class="btn btn-primary btn-sm" onclick="abrirModalCriar()">+ Novo Evento</button>
+            <button class="btn btn-outline btn-sm" onclick="sair()">Sair</button>
+        </div>
+    </div>
+
+    <!-- Lista de Eventos -->
+    <div id="eventosContainer">
+        <div class="loading-spinner">Carregando eventos</div>
+    </div>
+</div>
+
+<!-- ========== MODAL (CRIAR / EDITAR) ========== -->
+<div id="modalOverlay" class="modal-overlay">
+    <div class="modal-box">
+        <h2 id="modalTitle">Novo Evento</h2>
+        <p class="sub" id="modalSub">Preencha os dados para criar um novo evento</p>
+        <form id="modalForm" onsubmit="return salvarEvento(event)">
+            <input type="hidden" id="eventoId" value="">
+
+            <div class="form-group">
+                <label>Título</label>
+                <input type="text" id="editTitulo" placeholder="Nome do espetáculo" required>
+            </div>
+
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea id="editDescricao" placeholder="Descreva o evento..." required></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Data e Hora</label>
+                    <input type="datetime-local" id="editDataHora" required>
+                </div>
+                <div class="form-group">
+                    <label>Capacidade Total</label>
+                    <input type="number" id="editCapacidade" min="1" value="100" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Local</label>
+                <input type="text" id="editLocal" placeholder="Sala Principal, Teatro Municipal" required>
+            </div>
+
+            <div class="form-group">
+                <label>URL da Imagem</label>
+                <input type="url" id="editImagem" placeholder="https://exemplo.com/imagem.jpg">
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select id="editStatus">
+                    <option value="BREVE">Em Breve</option>
+                    <option value="EM_CARTAZ">Em Cartaz</option>
+                    <option value="ENCERRADO">Encerrado</option>
+                    <option value="CANCELADO">Cancelado</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
+                <button type="submit" class="btn btn-success" id="modalSubmitBtn">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ========== TOAST CONTAINER ========== -->
+<div id="toastContainer" class="toast-container"></div>
+
+<script>
+    // ============================================================
+    //  CONFIGURAÇÃO DA API
+    // ============================================================
+    const API_BASE = ''; // vazio = mesma origem (http://localhost:8080)
+    let authToken = '';
+
+    // ============================================================
+    //  LOGIN
+    // ============================================================
+    function fazerLogin(event) {
+        event.preventDefault();
+        const user = document.getElementById('loginUser').value.trim();
+        const pass = document.getElementById('loginPass').value.trim();
+
+        if (!user || !pass) {
+            mostrarToast('Preencha usuário e senha.', 'error');
+            return false;
+        }
+
+        // Gera o token Basic Auth
+        authToken = btoa(`${user}:${pass}`);
+
+        // Testa a autenticação chamando a rota admin
+        fetch(`${API_BASE}/api/eventos/admin/todos`, {
+            headers: {
+                'Authorization': `Basic ${authToken}`
+            }
+        })
+            .then(res => {
+                if (res.status === 401 || res.status === 403) {
+                    throw new Error('Usuário ou senha incorretos.');
+                }
+                if (!res.ok) {
+                    throw new Error('Erro ao conectar com o servidor.');
+                }
+                return res.json();
+            })
+            .then(() => {
+                // Login bem-sucedido!
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('appContainer').classList.remove('hidden');
+                carregarEventos();
+                mostrarToast('Bem-vindo! 👋', 'success');
+            })
+            .catch(err => {
+                mostrarToast(err.message || 'Falha no login.', 'error');
+                authToken = '';
+            });
+
+        return false;
+    }
+
+    function sair() {
+        authToken = '';
+        document.getElementById('appContainer').classList.add('hidden');
+        document.getElementById('loginScreen').classList.remove('hidden');
+        document.getElementById('loginPass').value = '';
+        mostrarToast('Desconectado.', 'info');
+    }
+
+    // ============================================================
+    //  CARREGAR EVENTOS
+    // ============================================================
+    function carregarEventos() {
+        const container = document.getElementById('eventosContainer');
+        container.innerHTML = '<div class="loading-spinner">Carregando eventos</div>';
+
+        fetch(`${API_BASE}/api/eventos/admin/todos`, {
+            headers: {
+                'Authorization': `Basic ${authToken}`
+            }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Erro ao buscar eventos.');
+                return res.json();
+            })
+            .then(eventos => {
+                if (!eventos || eventos.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align:center; padding:60px 20px; color:#666;">
+                            <p style="font-size:18px; margin-bottom:8px;">🎭 Nenhum evento cadastrado</p>
+                            <p style="font-size:14px;">Clique em "+ Novo Evento" para começar.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                container.innerHTML = gerarTabela(eventos);
+            })
+            .catch(err => {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:40px; color:#b22222;">
+                        ❌ ${err.message}
+                    </div>
+                `;
+                mostrarToast(err.message, 'error');
+            });
+    }
+
+    // ============================================================
+    //  GERAR TABELA HTML
+    // ============================================================
+    function gerarTabela(eventos) {
+        let html = `
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Imagem</th>
+                                <th>Título</th>
+                                <th>Data</th>
+                                <th>Local</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+        eventos.forEach(e => {
+            const statusClass = {
+                'BREVE': 'status-breve',
+                'EM_CARTAZ': 'status-cartaz',
+                'ENCERRADO': 'status-encerrado',
+                'CANCELADO': 'status-cancelado'
+            } [e.status] || 'status-breve';
+
+            const dataFormatada = e.dataHora ? new Date(e.dataHora).toLocaleString('pt-BR') : '-';
+
+            html += `
+                    <tr>
+                        <td>
+                            <img src="${e.imagemUrl || ''}" alt="${e.titulo}" class="img-thumb"
+                                 onerror="this.style.display='none'">
+                        </td>
+                        <td><strong>${e.titulo}</strong></td>
+                        <td>${dataFormatada}</td>
+                        <td>${e.local || '-'}</td>
+                        <td><span class="status-badge ${statusClass}">${e.status}</span></td>
+                        <td style="text-align:right;">
+                            <div class="actions-cell" style="justify-content:flex-end;">
+                                <button class="btn btn-warning btn-sm" onclick="abrirModalEditar(${e.id})">✏️ Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="deletarEvento(${e.id})">🗑️ Excluir</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+        });
+
+        html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        return html;
+    }
+
+    // ============================================================
+    //  MODAL (CRIAR / EDITAR)
+    // ============================================================
+    function abrirModalCriar() {
+        document.getElementById('modalTitle').textContent = 'Novo Evento';
+        document.getElementById('modalSub').textContent = 'Preencha os dados para criar um novo evento';
+        document.getElementById('eventoId').value = '';
+        document.getElementById('modalForm').reset();
+        document.getElementById('editCapacidade').value = 100;
+        document.getElementById('editStatus').value = 'BREVE';
+        document.getElementById('modalSubmitBtn').textContent = 'Criar Evento';
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function abrirModalEditar(id) {
+        fetch(`${API_BASE}/api/eventos/${id}`, {
+            headers: {
+                'Authorization': `Basic ${authToken}`
+            }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Erro ao buscar evento.');
+                return res.json();
+            })
+            .then(evento => {
+                document.getElementById('modalTitle').textContent = 'Editar Evento';
+                document.getElementById('modalSub').textContent = 'Altere as informações do evento';
+                document.getElementById('eventoId').value = evento.id;
+                document.getElementById('editTitulo').value = evento.titulo || '';
+                document.getElementById('editDescricao').value = evento.descricao || '';
+                document.getElementById('editDataHora').value = evento.dataHora ? evento.dataHora.slice(0, 16) : '';
+                document.getElementById('editCapacidade').value = evento.capacidadeTotal || 100;
+                document.getElementById('editLocal').value = evento.local || '';
+                document.getElementById('editImagem').value = evento.imagemUrl || '';
+                document.getElementById('editStatus').value = evento.status || 'BREVE';
+                document.getElementById('modalSubmitBtn').textContent = 'Atualizar';
+                document.getElementById('modalOverlay').classList.add('active');
+            })
+            .catch(err => {
+                mostrarToast(err.message, 'error');
+            });
+    }
+
+    function fecharModal() {
+        document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    // ============================================================
+    //  SALVAR (CRIAR OU ATUALIZAR)
+    // ============================================================
+    function salvarEvento(event) {
+        event.preventDefault();
+
+        const id = document.getElementById('eventoId').value;
+        const dados = {
+            titulo: document.getElementById('editTitulo').value.trim(),
+            descricao: document.getElementById('editDescricao').value.trim(),
+            dataHora: document.getElementById('editDataHora').value,
+            capacidadeTotal: parseInt(document.getElementById('editCapacidade').value) || 1,
+            local: document.getElementById('editLocal').value.trim(),
+            imagemUrl: document.getElementById('editImagem').value.trim(),
+            status: document.getElementById('editStatus').value,
+        };
+
+        if (!dados.titulo || !dados.descricao || !dados.dataHora || !dados.local) {
+            mostrarToast('Preencha todos os campos obrigatórios.', 'error');
+            return false;
+        }
+
+        const url = id ? `${API_BASE}/api/eventos/admin/${id}` : `${API_BASE}/api/eventos/admin`;
+        const method = id ? 'PUT' : 'POST';
+
+        fetch(url, {
+            method: method,
+            headers: {
+                'Authorization': `Basic ${authToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dados)
+        })
+            .then(res => {
+                if (!res.ok) {
+                    return res.text().then(t => { throw new Error(t || 'Erro ao salvar.'); });
+                }
+                return res.json();
+            })
+            .then(() => {
+                fecharModal();
+                carregarEventos();
+                mostrarToast(id ? '✅ Evento atualizado!' : '✅ Evento criado com sucesso!', 'success');
+            })
+            .catch(err => {
+                mostrarToast(err.message, 'error');
+            });
+
+        return false;
+    }
+
+    // ============================================================
+    //  DELETAR
+    // ============================================================
+    function deletarEvento(id) {
+        if (!confirm('Tem certeza que deseja excluir este evento permanentemente?')) return;
+
+        fetch(`${API_BASE}/api/eventos/admin/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Basic ${authToken}`
+            }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Erro ao excluir evento.');
+                carregarEventos();
+                mostrarToast('🗑️ Evento excluído.', 'info');
+            })
+            .catch(err => {
+                mostrarToast(err.message, 'error');
+            });
+    }
+
+    // ============================================================
+    //  TOAST (NOTIFICAÇÕES)
+    // ============================================================
+    function mostrarToast(mensagem, tipo = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${tipo}`;
+        toast.textContent = mensagem;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(40px)';
+            toast.style.transition = 'all 0.3s ease';
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 3500);
+    }
+
+    // ============================================================
+    //  FECHAR MODAL AO CLICAR FORA
+    // ============================================================
+    document.getElementById('modalOverlay').addEventListener('click', function(e) {
+        if (e.target === this) fecharModal();
+    });
+
+    // ============================================================
+    //  ENTER NO LOGIN
+    // ============================================================
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !document.getElementById('appContainer').classList.contains('hidden')) {
+            // Evita submit acidental fora do form
+        }
+    });
+
+    console.log('🎭 Painel Admin carregado. Use admin/admin123 para entrar.');
+</script>
+
+</body>
+</html>
