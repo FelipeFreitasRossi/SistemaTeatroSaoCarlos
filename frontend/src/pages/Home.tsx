@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import AtmosphereBackground from '../components/common/AtmosphereBackground';
 import WelcomeHero from '../components/common/WelcomeHero';
 import AboutSection from '../components/common/AboutSection';
-import ContactSection from '../components/common/ContactSection';
 import PublicEventList from '../components/public/PublicEventList';
 import LoadingScreen from '../components/common/LoadingScreen';
 
@@ -12,14 +11,25 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
+  const [dadosCarregados, setDadosCarregados] = useState(false);
+  const loadingExecutado = React.useRef(false);
+
+  const handleDadosCarregados = () => {
+    if (!loadingExecutado.current) {
+      loadingExecutado.current = true;
+      setDadosCarregados(true);
+    }
+  };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-      ScrollTrigger.refresh();
-    }, 2500);
-    return () => clearTimeout(timer);
-  }, []);
+    if (dadosCarregados) {
+      const timer = setTimeout(() => {
+        setLoading(false);
+        ScrollTrigger.refresh();
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [dadosCarregados]);
 
   return (
     <>
@@ -40,10 +50,10 @@ const Home: React.FC = () => {
                   Confira os espetáculos em cartaz e em breve no Teatro Municipal.
                 </p>
               </div>
-              <PublicEventList />
+              <PublicEventList onLoaded={handleDadosCarregados} />
             </div>
           </section>
-          <ContactSection />
+          {/* A seção ContactSection foi removida */}
         </div>
       </div>
     </>

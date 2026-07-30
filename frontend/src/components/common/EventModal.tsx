@@ -1,82 +1,182 @@
-// src/components/common/EventModal.tsx
-// Essa é a "janela" que abre quando o visitante clica num evento na home,
-// mostrando todos os detalhes.
-
-import { useEffect, useRef } from 'react';
-import { X, Calendar, MapPin, Ticket } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { X, Calendar, MapPin, Users } from 'lucide-react';
+import { gsap } from 'gsap';
 import type { Evento } from '../../types/Evento';
-import { animarEntradaModal, animarSaidaModal, zoomImagemModal } from '../../utils/gsapAnimations';
+import AudioReader from './AudioReader';
 
 interface EventModalProps {
-  evento: Evento;
-  onFechar: () => void;
+  evento: Evento | null;
+  onClose: () => void;
 }
 
-export default function EventModal({ evento, onFechar }: EventModalProps) {
-  const jaAnimouEntrada = useRef(false);
+const EventModal: React.FC<EventModalProps> = ({ evento, onClose }) => {
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (!jaAnimouEntrada.current) {
-      animarEntradaModal('.modal-overlay', '.modal-box');
-      zoomImagemModal('.modal-imagem');
-      jaAnimouEntrada.current = true;
+    if (overlayRef.current && modalRef.current) {
+      gsap.fromTo(
+        overlayRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: 'power2.out' }
+      );
+      gsap.fromTo(
+        modalRef.current,
+        { opacity: 0, scale: 0.92, y: 30 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: 'power3.out' }
+      );
+      // Foco no botão de fechar
+      setTimeout(() => {
+        if (closeButtonRef.current) closeButtonRef.current.focus();
+      }, 100);
     }
-  }, []);
 
-  function fecharComAnimacao() {
-    animarSaidaModal('.modal-overlay', '.modal-box', onFechar);
-  }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === overlayRef.current) onClose();
+  };
+
+  if (!evento) return null;
+
+  const dataFormatada = new Date(evento.dataHora).toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const statusConfig = {
+    BREVE: { label: 'Em Breve', className: 'bg-white/10 text-gray-300 border-white/10' },
+    EM_CARTAZ: { label: 'Em Cartaz', className: 'bg-white/20 text-white border-white/30' },
+    ENCERRADO: { label: 'Encerrado', className: 'bg-white/5 text-gray-500 border-white/5' },
+    CANCELADO: { label: 'Cancelado', className: 'bg-red-500/20 text-red-300 border-red-500/20' },
+  };
+
+  const status = statusConfig[evento.status] || statusConfig.BREVE;
+
+  // Texto completo para leitura em voz alta
+  const textoCompleto = `
+    ${evento.titulo}. 
+    ${evento.descricao}. 
+    Data: ${dataFormatada}. 
+    Local: ${evento.local}. 
+    Capacidade: ${evento.capacidadeTotal} lugares. 
+    Status: ${status.label}.
+  `;
 
   return (
     <div
-      className="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
-      onClick={fecharComAnimacao}
+      ref={overlayRef}
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+      onClick={handleOverlayClick}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
     >
       <div
-        className="modal-box relative w-full max-w-lg overflow-hidden rounded-2xl border border-[#C9A227]/30
-                   bg-[#151318] shadow-2xl shadow-black/60"
-        onClick={(e) => e.stopPropagation()} // evita fechar quando clica DENTRO do card
+        ref={modalRef}
+        className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-[#111111] rounded-2xl border border-white/10 shadow-2xl shadow-black/50"
+        style={{ scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' }}
       >
         <button
-          onClick={fecharComAnimacao}
-          className="absolute right-3 top-3 z-10 rounded-full bg-black/50 p-1.5 text-[#F5F1E8] transition hover:bg-black/70 hover:rotate-90"
-          aria-label="Fechar"
+          ref={closeButtonRef}
+          onClick={onClose}
+          className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-all duration-300 flex items-center justify-center text-gray-400 hover:text-white border border-white/10 hover:border-white/30"
+          aria-label="Fechar modal"
         >
           <X size={18} />
         </button>
 
-        <div className="h-56 w-full overflow-hidden">
-          <img
-            src={evento.imagemUrl}
-            alt={evento.titulo}
-            className="modal-imagem h-full w-full object-cover"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src =
-                'https://placehold.co/600x400/151318/C9A227?text=Teatro';
-            }}
-          />
+        <div className="relative w-full h-56 md:h-64 overflow-hidden rounded-t-2xl">
+          {evento.imagemUrl ? (
+            <img
+              src={evento.imagemUrl}
+              alt={`Imagem do evento ${evento.titulo}`}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center text-6xl" aria-hidden="true">
+              🎭
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/40 to-transparent" aria-hidden="true" />
+          <div className="absolute bottom-4 left-4">
+            <span className={`px-4 py-1.5 rounded-full text-xs font-medium border backdrop-blur-sm ${status.className}`}>
+              {status.label}
+            </span>
+          </div>
         </div>
 
-        <div className="space-y-4 p-6">
-          <h2 className="font-['Playfair_Display'] text-2xl font-semibold text-[#F5F1E8]">
-            {evento.titulo}
-          </h2>
-          <p className="text-sm leading-relaxed text-[#A8A29A]">{evento.descricao}</p>
+        <div className="p-6 md:p-8 space-y-5">
+          {/* Título + Botão Ouvir */}
+          <div className="flex items-start justify-between gap-4">
+            <h2 id="modal-title" className="font-playfair text-2xl md:text-3xl font-bold text-white leading-tight">
+              {evento.titulo}
+            </h2>
+            <AudioReader
+              text={textoCompleto}
+              label="Ouvir evento completo"
+              className="flex-shrink-0 mt-1"
+            />
+          </div>
 
-          <div className="space-y-2 border-t border-[#C9A227]/15 pt-4 text-sm text-[#C9A227]">
-            <p className="flex items-center gap-2">
-              <Calendar size={16} /> {new Date(evento.dataHora).toLocaleString('pt-BR')}
-            </p>
-            <p className="flex items-center gap-2 text-[#A8A29A]">
-              <MapPin size={16} /> {evento.local}
-            </p>
-            <p className="flex items-center gap-2 text-[#A8A29A]">
-              <Ticket size={16} /> {evento.ingressosDisponiveis} de {evento.capacidadeTotal}{' '}
-              ingressos disponíveis
-            </p>
+          <div className="w-12 h-px bg-gradient-to-r from-white/40 to-transparent" aria-hidden="true" />
+
+          <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+            {evento.descricao}
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+            <div className="bg-white/5 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-colors">
+              <div className="flex items-start gap-3">
+                <Calendar className="text-white/50 mt-0.5" size={18} aria-hidden="true" />
+                <div>
+                  <p className="text-[10px] text-gray-500 uppercase tracking-wider">Data</p>
+                  <p className="text-sm text-white font-medium">{dataFormatada}</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white/5 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-colors">
+              <div className="flex items-start gap-3">
+                <MapPin className="text-white/50 mt-0.5" size={18} aria-hidden="true" />
+                <div>
+                  <p className="text-[10px] text-gray-500 uppercase tracking-wider">Local</p>
+                  <p className="text-sm text-white font-medium">{evento.local}</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white/5 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-colors">
+              <div className="flex items-start gap-3">
+                <Users className="text-white/50 mt-0.5" size={18} aria-hidden="true" />
+                <div>
+                  <p className="text-[10px] text-gray-500 uppercase tracking-wider">Capacidade</p>
+                  <p className="text-sm text-white font-medium">{evento.capacidadeTotal} lugares</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-white/10">
+            <button
+              onClick={onClose}
+              className="w-full py-3 bg-white/5 hover:bg-white/15 text-white font-medium rounded-xl transition-all duration-300 text-sm border border-white/5 hover:border-white/20 flex items-center justify-center gap-2 group"
+            >
+              <span>Fechar</span>
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true">✕</span>
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default EventModal;

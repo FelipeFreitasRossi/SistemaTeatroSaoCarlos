@@ -107,3 +107,60 @@ body {
     font-size: 15px;
   }
 }
+
+.bg-gradient-radial {
+  background: radial-gradient(circle at center, #2a2a2a 0%, #0B0B0B 70%);
+}
+
+/* ========== ACESSIBILIDADE ========== */
+
+/* Foco visível para navegação por teclado */
+*:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip link (escondido visualmente, mas visível ao focar) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only:focus-visible {
+  position: fixed;
+  width: auto;
+  height: auto;
+  padding: 16px 24px;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background: #ffffff;
+  color: #000000;
+  z-index: 9999;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+/* Contraste aprimorado para links e botões */
+a, button {
+  transition: color 0.2s, background 0.2s;
+}
+
+/* Remove movimento para quem prefere reduzir animações */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

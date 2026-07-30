@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo - Teatro Municipal</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Ícones (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* ========== RESET & TEMA ========== */
+        /* ============================================================
+           RESET & TEMA
+           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -16,65 +22,113 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: #0B0B0B;
             color: #F5F5F5;
-            padding: 20px;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0 12px;
         }
 
-        /* ========== LAYOUT PRINCIPAL ========== */
+        /* ============================================================
+           SCROLLBAR
+           ============================================================ */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #181818;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        /* ============================================================
+           LAYOUT PRINCIPAL
+           ============================================================ */
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
+            padding: 0 12px;
+            width: 100%;
         }
 
-        /* ========== HEADER ========== */
+        /* ============================================================
+           HEADER
+           ============================================================ */
         .header {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            margin-bottom: 30px;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 24px;
+            gap: 12px;
         }
 
-        .header h1 {
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-brand img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .header-brand h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 700;
             color: #fff;
         }
 
-        .header h1 span {
+        .header-brand h1 span {
             color: #888;
         }
 
         .header-actions {
             display: flex;
-            gap: 12px;
             align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .badge-status {
+        .header-actions .badge {
             background: rgba(255, 255, 255, 0.06);
-            padding: 6px 14px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             color: #aaa;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            white-space: nowrap;
         }
 
-        /* ========== BOTÕES ========== */
+        /* ============================================================
+           BOTÕES
+           ============================================================ */
         .btn {
-            padding: 10px 24px;
+            padding: 8px 16px;
             border: none;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.25s ease;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            text-decoration: none;
+            white-space: nowrap;
         }
 
         .btn-primary {
@@ -82,7 +136,7 @@
             color: #0B0B0B;
         }
         .btn-primary:hover {
-            background: #dddddd;
+            background: #e0e0e0;
             transform: scale(1.02);
         }
 
@@ -112,7 +166,7 @@
 
         .btn-outline {
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             color: #ccc;
         }
         .btn-outline:hover {
@@ -120,39 +174,88 @@
         }
 
         .btn-sm {
-            padding: 6px 14px;
-            font-size: 12px;
+            padding: 4px 10px;
+            font-size: 11px;
+            border-radius: 6px;
         }
 
-        /* ========== TABELA ========== */
+        /* ============================================================
+           CARDS DE ESTATÍSTICAS (DASHBOARD)
+           ============================================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 14px 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .stat-card .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
+        .stat-card .stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #888;
+            margin-top: 4px;
+        }
+        .stat-card .stat-icon {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        /* ============================================================
+           TABELA
+           ============================================================ */
         .table-wrapper {
             overflow-x: auto;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.06);
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(4px);
+            margin-top: 6px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 14px;
+            font-size: 13px;
+            min-width: 500px;
         }
 
         th {
             text-align: left;
-            padding: 14px 16px;
+            padding: 10px 12px;
             background: rgba(255, 255, 255, 0.03);
             color: #aaa;
             font-weight: 500;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         td {
-            padding: 14px 16px;
+            padding: 10px 12px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             vertical-align: middle;
         }
@@ -163,33 +266,38 @@
 
         .status-badge {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.03em;
+            border: 1px solid transparent;
         }
         .status-breve {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             color: #aaa;
+            border-color: rgba(255, 255, 255, 0.1);
         }
         .status-cartaz {
-            background: rgba(255, 215, 0, 0.15);
+            background: rgba(255, 215, 0, 0.12);
             color: #e8c766;
+            border-color: rgba(255, 215, 0, 0.15);
         }
         .status-encerrado {
-            background: rgba(100, 100, 100, 0.2);
+            background: rgba(100, 100, 100, 0.15);
             color: #888;
+            border-color: rgba(100, 100, 100, 0.1);
         }
         .status-cancelado {
-            background: rgba(200, 50, 50, 0.15);
+            background: rgba(200, 50, 50, 0.12);
             color: #e06666;
+            border-color: rgba(200, 50, 50, 0.15);
         }
 
         .img-thumb {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             object-fit: cover;
             border-radius: 6px;
             background: #222;
@@ -197,7 +305,7 @@
         }
 
         .text-truncate {
-            max-width: 200px;
+            max-width: 140px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -205,11 +313,37 @@
 
         .actions-cell {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
-        /* ========== MODAL ========== */
+        /* ============================================================
+           EMPTY STATE
+           ============================================================ */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        .empty-state .icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+            color: #444;
+        }
+        .empty-state h3 {
+            color: #aaa;
+            font-weight: 400;
+            margin-bottom: 6px;
+        }
+        .empty-state p {
+            font-size: 13px;
+            color: #555;
+        }
+
+        /* ============================================================
+           MODAL
+           ============================================================ */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -219,24 +353,32 @@
             z-index: 999;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 16px;
+            animation: fadeOverlay 0.3s ease;
         }
         .modal-overlay.active {
             display: flex;
+        }
+
+        @keyframes fadeOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-box {
             background: #141414;
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
-            max-width: 540px;
+            max-width: 520px;
             width: 100%;
-            padding: 32px 28px;
+            padding: 24px 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-            animation: fadeUp 0.3s ease;
+            animation: slideUp 0.35s ease;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        @keyframes fadeUp {
+        @keyframes slideUp {
             from {
                 opacity: 0;
                 transform: translateY(30px) scale(0.96);
@@ -249,22 +391,22 @@
 
         .modal-box h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            margin-bottom: 6px;
+            font-size: 22px;
+            margin-bottom: 4px;
             color: #fff;
         }
         .modal-box .sub {
             color: #888;
-            font-size: 14px;
-            margin-bottom: 24px;
+            font-size: 13px;
+            margin-bottom: 20px;
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         .form-group label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.04em;
@@ -275,13 +417,13 @@
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 10px 14px;
+            padding: 9px 12px;
             background: #0B0B0B;
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 8px;
             color: #f5f5f5;
-            font-size: 14px;
-            transition: border 0.2s;
+            font-size: 13px;
+            transition: border 0.2s, box-shadow 0.2s;
             font-family: 'Inter', sans-serif;
         }
         .form-group input:focus,
@@ -289,47 +431,55 @@
         .form-group select:focus {
             outline: none;
             border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
         }
         .form-group textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 70px;
         }
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
         }
 
         .modal-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             justify-content: flex-end;
-            margin-top: 24px;
+            margin-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 20px;
+            padding-top: 16px;
+            flex-wrap: wrap;
         }
 
-        /* ========== TOAST ========== */
+        /* ============================================================
+           TOAST
+           ============================================================ */
         .toast-container {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 20px;
+            right: 20px;
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+            max-width: 340px;
+            width: 100%;
         }
         .toast {
             background: #1a1a1a;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 14px 22px;
+            padding: 12px 16px;
             border-radius: 10px;
             color: #fff;
-            font-size: 14px;
+            font-size: 13px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
-            animation: slideIn 0.3s ease;
-            min-width: 200px;
+            animation: slideIn 0.35s ease;
             backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .toast.success {
             border-left: 4px solid #2b7a4b;
@@ -339,6 +489,9 @@
         }
         .toast.info {
             border-left: 4px solid #b8860b;
+        }
+        .toast .toast-icon {
+            font-size: 18px;
         }
 
         @keyframes slideIn {
@@ -352,150 +505,330 @@
             }
         }
 
-        /* ========== LOADING ========== */
-        .loading-spinner {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-        .loading-spinner::after {
-            content: '...';
-            animation: dots 1.2s steps(4, end) infinite;
-        }
-        @keyframes dots {
-            0% {
-                content: '';
-            }
-            25% {
-                content: '.';
-            }
-            50% {
-                content: '..';
-            }
-            75% {
-                content: '...';
-            }
-        }
-
-        /* ========== TELA DE LOGIN ========== */
+        /* ============================================================
+           LOGIN
+           ============================================================ */
         .login-screen {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             background: #0B0B0B;
+            padding: 16px;
         }
         .login-box {
             background: #141414;
-            padding: 40px 32px;
+            padding: 32px 24px;
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.06);
             width: 100%;
-            max-width: 380px;
+            max-width: 360px;
             text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+        .login-box .logo {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            border-radius: 50%;
+            margin-bottom: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
         .login-box h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            margin-bottom: 6px;
+            font-size: 24px;
+            margin-bottom: 4px;
+            color: #fff;
         }
         .login-box p {
             color: #888;
-            font-size: 14px;
-            margin-bottom: 24px;
+            font-size: 13px;
+            margin-bottom: 20px;
         }
         .login-box input {
             width: 100%;
-            padding: 12px 14px;
-            margin-bottom: 12px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
             background: #0B0B0B;
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 8px;
             color: #fff;
-            font-size: 14px;
+            font-size: 13px;
+            transition: border 0.2s;
         }
         .login-box input:focus {
             outline: none;
-            border-color: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.25);
         }
         .login-box .btn {
             width: 100%;
             justify-content: center;
             margin-top: 4px;
         }
+        .login-box .hint {
+            margin-top: 14px;
+            font-size: 11px;
+            color: #444;
+        }
+        .login-box .hint code {
+            background: rgba(255,255,255,0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #aaa;
+            font-size: 11px;
+        }
 
         .hidden {
             display: none !important;
         }
 
-        /* ========== RESPONSIVO ========== */
-        @media (max-width: 640px) {
+        /* ============================================================
+           RODAPÉ COM INFORMAÇÕES DE CREDENCIAIS
+           ============================================================ */
+        .footer-cred {
+            margin-top: 30px;
+            padding: 16px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            text-align: center;
+            font-size: 12px;
+            color: #555;
+        }
+        .footer-cred code {
+            background: rgba(255,255,255,0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #888;
+            font-size: 12px;
+        }
+        .footer-cred a {
+            color: #888;
+            text-decoration: underline;
+        }
+        .footer-cred a:hover {
+            color: #fff;
+        }
+
+        /* ============================================================
+           RESPONSIVIDADE
+           ============================================================ */
+        @media (max-width: 768px) {
             .header {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
+                align-items: stretch;
+                gap: 8px;
             }
             .header-actions {
-                width: 100%;
                 justify-content: space-between;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+            .header-actions .badge {
+                font-size: 10px;
+                padding: 3px 10px;
+            }
+            .btn {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+            .btn-sm {
+                font-size: 10px;
+                padding: 3px 8px;
             }
             .form-row {
                 grid-template-columns: 1fr;
             }
             .modal-box {
-                padding: 24px 16px;
+                padding: 18px 14px;
             }
             .actions-cell {
-                flex-direction: column;
-                align-items: flex-start;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+                gap: 4px;
             }
             .text-truncate {
-                max-width: 120px;
+                max-width: 100px;
             }
             .toast-container {
-                left: 20px;
-                right: 20px;
-                bottom: 20px;
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+                max-width: 100%;
             }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            .stat-card {
+                padding: 10px 8px;
+            }
+            .stat-card .stat-number {
+                font-size: 20px;
+            }
+            table {
+                font-size: 12px;
+                min-width: 420px;
+            }
+            th, td {
+                padding: 8px 10px;
+            }
+            .img-thumb {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-brand h1 {
+                font-size: 18px;
+            }
+            .header-brand img {
+                width: 30px;
+                height: 30px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+            .stat-card .stat-number {
+                font-size: 18px;
+            }
+            .stat-card .stat-label {
+                font-size: 8px;
+            }
+            table {
+                font-size: 11px;
+                min-width: 340px;
+            }
+            th, td {
+                padding: 6px 8px;
+            }
+            .btn {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+            .btn-sm {
+                font-size: 9px;
+                padding: 2px 6px;
+            }
+            .modal-box {
+                padding: 14px 10px;
+            }
+            .modal-box h2 {
+                font-size: 18px;
+            }
+            .login-box {
+                padding: 24px 16px;
+            }
+            .login-box h2 {
+                font-size: 20px;
+            }
+        }
+
+        /* ============================================================
+           SKELETON LOADING
+           ============================================================ */
+        .skeleton {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
         }
     </style>
 </head>
 <body>
 
-<!-- ========== TELA DE LOGIN ========== -->
+<!-- ============================================================
+TELA DE LOGIN
+============================================================ -->
 <div id="loginScreen" class="login-screen">
     <div class="login-box">
-        <h2>🎭 Painel Admin</h2>
+        <img src="https://i.postimg.cc/j5g22R73/Theatrical-masks-set-Premium-Vector.jpg" alt="Logo Teatro Municipal" class="logo">
+        <h2>Painel Admin</h2>
         <p>Digite suas credenciais para acessar</p>
         <form id="loginForm" onsubmit="return fazerLogin(event)">
-            <input type="text" id="loginUser" placeholder="Usuário" value="admin" required>
+            <input type="text" id="loginUser" placeholder="Usuário" value="admin" required autofocus>
             <input type="password" id="loginPass" placeholder="Senha" value="admin123" required>
             <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
-        <p style="margin-top: 16px; font-size: 12px; color: #555;">Padrão: admin / admin123</p>
+        <p class="hint">
+            <i class="fas fa-info-circle"></i> Credenciais padrão: <code>admin</code> / <code>admin123</code>
+        </p>
+        <p class="hint" style="margin-top:6px; font-size:10px; color:#333;">
+            <i class="fas fa-edit"></i> Altere em <code>SecurityConfig.java</code>
+        </p>
     </div>
 </div>
 
-<!-- ========== PAINEL PRINCIPAL ========== -->
+<!-- ============================================================
+PAINEL PRINCIPAL
+============================================================ -->
 <div id="appContainer" class="container hidden">
 
-    <!-- Cabeçalho -->
-    <div class="header">
-        <h1>🎭 Teatro<span>Municipal</span></h1>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-brand">
+            <img src="https://i.postimg.cc/j5g22R73/Theatrical-masks-set-Premium-Vector.jpg" alt="Logo">
+            <h1>Teatro<span>Municipal</span></h1>
+        </div>
         <div class="header-actions">
-            <span class="badge-status">🔐 Admin</span>
-            <button class="btn btn-primary btn-sm" onclick="abrirModalCriar()">+ Novo Evento</button>
-            <button class="btn btn-outline btn-sm" onclick="sair()">Sair</button>
+            <span class="badge"><i class="fas fa-lock"></i> Admin</span>
+            <button class="btn btn-primary btn-sm" onclick="abrirModalCriar()">
+                <i class="fas fa-plus"></i> Novo
+            </button>
+            <button class="btn btn-outline btn-sm" onclick="sair()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+    </header>
+
+    <!-- DASHBOARD: Cards de estatísticas -->
+    <section class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="stat-number" id="totalEventos">0</div>
+            <div class="stat-label">Total</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-play-circle"></i></div>
+            <div class="stat-number" id="totalEmCartaz">0</div>
+            <div class="stat-label">Em Cartaz</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+            <div class="stat-number" id="totalBreve">0</div>
+            <div class="stat-label">Em Breve</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-number" id="totalEncerrados">0</div>
+            <div class="stat-label">Encerrados</div>
+        </div>
+    </section>
+
+    <!-- LISTA DE EVENTOS -->
+    <div id="eventosContainer">
+        <div class="loading-spinner" style="text-align:center; padding:30px; color:#666;">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p style="margin-top:10px;">Carregando eventos...</p>
         </div>
     </div>
 
-    <!-- Lista de Eventos -->
-    <div id="eventosContainer">
-        <div class="loading-spinner">Carregando eventos</div>
+    <!-- RODAPÉ COM DICA DE CREDENCIAIS -->
+    <div class="footer-cred">
+        <i class="fas fa-key"></i> Credenciais padrão: <code>admin</code> / <code>admin123</code> &nbsp;|&nbsp;
+        <i class="fas fa-edit"></i> Altere em <code>SecurityConfig.java</code> no backend
     </div>
 </div>
 
-<!-- ========== MODAL (CRIAR / EDITAR) ========== -->
+<!-- ============================================================
+MODAL (CRIAR / EDITAR)
+============================================================ -->
 <div id="modalOverlay" class="modal-overlay">
     <div class="modal-box">
         <h2 id="modalTitle">Novo Evento</h2>
@@ -504,38 +837,38 @@
             <input type="hidden" id="eventoId" value="">
 
             <div class="form-group">
-                <label>Título</label>
+                <label for="editTitulo"><i class="fas fa-heading"></i> Título</label>
                 <input type="text" id="editTitulo" placeholder="Nome do espetáculo" required>
             </div>
 
             <div class="form-group">
-                <label>Descrição</label>
+                <label for="editDescricao"><i class="fas fa-align-left"></i> Descrição</label>
                 <textarea id="editDescricao" placeholder="Descreva o evento..." required></textarea>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>Data e Hora</label>
+                    <label for="editDataHora"><i class="fas fa-calendar"></i> Data/Hora</label>
                     <input type="datetime-local" id="editDataHora" required>
                 </div>
                 <div class="form-group">
-                    <label>Capacidade Total</label>
+                    <label for="editCapacidade"><i class="fas fa-users"></i> Capacidade</label>
                     <input type="number" id="editCapacidade" min="1" value="100" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Local</label>
+                <label for="editLocal"><i class="fas fa-map-pin"></i> Local</label>
                 <input type="text" id="editLocal" placeholder="Sala Principal, Teatro Municipal" required>
             </div>
 
             <div class="form-group">
-                <label>URL da Imagem</label>
+                <label for="editImagem"><i class="fas fa-image"></i> URL da Imagem</label>
                 <input type="url" id="editImagem" placeholder="https://exemplo.com/imagem.jpg">
             </div>
 
             <div class="form-group">
-                <label>Status</label>
+                <label for="editStatus"><i class="fas fa-tag"></i> Status</label>
                 <select id="editStatus">
                     <option value="BREVE">Em Breve</option>
                     <option value="EM_CARTAZ">Em Cartaz</option>
@@ -546,20 +879,27 @@
 
             <div class="modal-actions">
                 <button type="button" class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
-                <button type="submit" class="btn btn-success" id="modalSubmitBtn">Salvar</button>
+                <button type="submit" class="btn btn-success" id="modalSubmitBtn">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- ========== TOAST CONTAINER ========== -->
+<!-- ============================================================
+TOAST CONTAINER
+============================================================ -->
 <div id="toastContainer" class="toast-container"></div>
 
+<!-- ============================================================
+SCRIPT
+============================================================ -->
 <script>
     // ============================================================
     //  CONFIGURAÇÃO DA API
     // ============================================================
-    const API_BASE = ''; // vazio = mesma origem (http://localhost:8080)
+    const API_BASE = '';
     let authToken = '';
 
     // ============================================================
@@ -575,26 +915,17 @@
             return false;
         }
 
-        // Gera o token Basic Auth
         authToken = btoa(`${user}:${pass}`);
 
-        // Testa a autenticação chamando a rota admin
         fetch(`${API_BASE}/api/eventos/admin/todos`, {
-            headers: {
-                'Authorization': `Basic ${authToken}`
-            }
+            headers: { 'Authorization': `Basic ${authToken}` }
         })
             .then(res => {
-                if (res.status === 401 || res.status === 403) {
-                    throw new Error('Usuário ou senha incorretos.');
-                }
-                if (!res.ok) {
-                    throw new Error('Erro ao conectar com o servidor.');
-                }
+                if (res.status === 401 || res.status === 403) throw new Error('Usuário ou senha incorretos.');
+                if (!res.ok) throw new Error('Erro ao conectar com o servidor.');
                 return res.json();
             })
             .then(() => {
-                // Login bem-sucedido!
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appContainer').classList.remove('hidden');
                 carregarEventos();
@@ -621,23 +952,29 @@
     // ============================================================
     function carregarEventos() {
         const container = document.getElementById('eventosContainer');
-        container.innerHTML = '<div class="loading-spinner">Carregando eventos</div>';
+        container.innerHTML = `
+                <div style="text-align:center; padding:30px; color:#666;">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p style="margin-top:10px;">Carregando eventos...</p>
+                </div>
+            `;
 
         fetch(`${API_BASE}/api/eventos/admin/todos`, {
-            headers: {
-                'Authorization': `Basic ${authToken}`
-            }
+            headers: { 'Authorization': `Basic ${authToken}` }
         })
             .then(res => {
                 if (!res.ok) throw new Error('Erro ao buscar eventos.');
                 return res.json();
             })
             .then(eventos => {
+                atualizarEstatisticas(eventos);
+
                 if (!eventos || eventos.length === 0) {
                     container.innerHTML = `
-                        <div style="text-align:center; padding:60px 20px; color:#666;">
-                            <p style="font-size:18px; margin-bottom:8px;">🎭 Nenhum evento cadastrado</p>
-                            <p style="font-size:14px;">Clique em "+ Novo Evento" para começar.</p>
+                        <div class="empty-state">
+                            <div class="icon"><i class="fas fa-theater-masks"></i></div>
+                            <h3>Nenhum evento cadastrado</h3>
+                            <p>Clique em "Novo Evento" para começar.</p>
                         </div>
                     `;
                     return;
@@ -646,12 +983,29 @@
             })
             .catch(err => {
                 container.innerHTML = `
-                    <div style="text-align:center; padding:40px; color:#b22222;">
-                        ❌ ${err.message}
+                    <div class="empty-state" style="color:#b22222;">
+                        <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <h3>Erro ao carregar</h3>
+                        <p>${err.message}</p>
                     </div>
                 `;
                 mostrarToast(err.message, 'error');
             });
+    }
+
+    // ============================================================
+    //  ATUALIZAR ESTATÍSTICAS
+    // ============================================================
+    function atualizarEstatisticas(eventos) {
+        const total = eventos.length;
+        const emCartaz = eventos.filter(e => e.status === 'EM_CARTAZ').length;
+        const breve = eventos.filter(e => e.status === 'BREVE').length;
+        const encerrados = eventos.filter(e => e.status === 'ENCERRADO' || e.status === 'CANCELADO').length;
+
+        document.getElementById('totalEventos').textContent = total;
+        document.getElementById('totalEmCartaz').textContent = emCartaz;
+        document.getElementById('totalBreve').textContent = breve;
+        document.getElementById('totalEncerrados').textContent = encerrados;
     }
 
     // ============================================================
@@ -675,13 +1029,13 @@
             `;
 
         eventos.forEach(e => {
-            const statusClass = {
+            const statusMap = {
                 'BREVE': 'status-breve',
                 'EM_CARTAZ': 'status-cartaz',
                 'ENCERRADO': 'status-encerrado',
                 'CANCELADO': 'status-cancelado'
-            } [e.status] || 'status-breve';
-
+            };
+            const statusClass = statusMap[e.status] || 'status-breve';
             const dataFormatada = e.dataHora ? new Date(e.dataHora).toLocaleString('pt-BR') : '-';
 
             html += `
@@ -695,9 +1049,13 @@
                         <td>${e.local || '-'}</td>
                         <td><span class="status-badge ${statusClass}">${e.status}</span></td>
                         <td style="text-align:right;">
-                            <div class="actions-cell" style="justify-content:flex-end;">
-                                <button class="btn btn-warning btn-sm" onclick="abrirModalEditar(${e.id})">✏️ Editar</button>
-                                <button class="btn btn-danger btn-sm" onclick="deletarEvento(${e.id})">🗑️ Excluir</button>
+                            <div class="actions-cell">
+                                <button class="btn btn-warning btn-sm" onclick="abrirModalEditar(${e.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deletarEvento(${e.id})">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -713,7 +1071,7 @@
     }
 
     // ============================================================
-    //  MODAL (CRIAR / EDITAR)
+    //  MODAL
     // ============================================================
     function abrirModalCriar() {
         document.getElementById('modalTitle').textContent = 'Novo Evento';
@@ -722,15 +1080,14 @@
         document.getElementById('modalForm').reset();
         document.getElementById('editCapacidade').value = 100;
         document.getElementById('editStatus').value = 'BREVE';
-        document.getElementById('modalSubmitBtn').textContent = 'Criar Evento';
+        document.getElementById('modalSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> Criar Evento';
         document.getElementById('modalOverlay').classList.add('active');
+        setTimeout(() => document.getElementById('editTitulo').focus(), 100);
     }
 
     function abrirModalEditar(id) {
         fetch(`${API_BASE}/api/eventos/${id}`, {
-            headers: {
-                'Authorization': `Basic ${authToken}`
-            }
+            headers: { 'Authorization': `Basic ${authToken}` }
         })
             .then(res => {
                 if (!res.ok) throw new Error('Erro ao buscar evento.');
@@ -747,8 +1104,9 @@
                 document.getElementById('editLocal').value = evento.local || '';
                 document.getElementById('editImagem').value = evento.imagemUrl || '';
                 document.getElementById('editStatus').value = evento.status || 'BREVE';
-                document.getElementById('modalSubmitBtn').textContent = 'Atualizar';
+                document.getElementById('modalSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Atualizar';
                 document.getElementById('modalOverlay').classList.add('active');
+                setTimeout(() => document.getElementById('editTitulo').focus(), 100);
             })
             .catch(err => {
                 mostrarToast(err.message, 'error');
@@ -760,7 +1118,7 @@
     }
 
     // ============================================================
-    //  SALVAR (CRIAR OU ATUALIZAR)
+    //  SALVAR (CRIAR / ATUALIZAR)
     // ============================================================
     function salvarEvento(event) {
         event.preventDefault();
@@ -818,9 +1176,7 @@
 
         fetch(`${API_BASE}/api/eventos/admin/${id}`, {
             method: 'DELETE',
-            headers: {
-                'Authorization': `Basic ${authToken}`
-            }
+            headers: { 'Authorization': `Basic ${authToken}` }
         })
             .then(res => {
                 if (!res.ok) throw new Error('Erro ao excluir evento.');
@@ -833,13 +1189,25 @@
     }
 
     // ============================================================
-    //  TOAST (NOTIFICAÇÕES)
+    //  TOAST
     // ============================================================
     function mostrarToast(mensagem, tipo = 'info') {
         const container = document.getElementById('toastContainer');
         const toast = document.createElement('div');
         toast.className = `toast ${tipo}`;
-        toast.textContent = mensagem;
+
+        const icons = {
+            success: 'fas fa-check-circle',
+            error: 'fas fa-exclamation-circle',
+            info: 'fas fa-info-circle'
+        };
+        const icon = icons[tipo] || icons.info;
+
+        toast.innerHTML = `
+                <span class="toast-icon"><i class="${icon}"></i></span>
+                <span>${mensagem}</span>
+            `;
+
         container.appendChild(toast);
 
         setTimeout(() => {
@@ -847,7 +1215,7 @@
             toast.style.transform = 'translateX(40px)';
             toast.style.transition = 'all 0.3s ease';
             setTimeout(() => {
-                toast.remove();
+                if (toast.parentNode) toast.remove();
             }, 300);
         }, 3500);
     }
@@ -863,13 +1231,13 @@
     //  ENTER NO LOGIN
     // ============================================================
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !document.getElementById('appContainer').classList.contains('hidden')) {
-            // Evita submit acidental fora do form
+        if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) {
+            const form = document.getElementById('loginForm');
+            if (form) form.dispatchEvent(new Event('submit'));
         }
     });
 
-    console.log('🎭 Painel Admin carregado. Use admin/admin123 para entrar.');
+    console.log('🎭 Painel Admin carregado. Credenciais: admin/admin123');
 </script>
-
 </body>
 </html>

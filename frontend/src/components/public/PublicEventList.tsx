@@ -1,77 +1,106 @@
-// src/components/public/PublicEventList.tsx
-// Busca os eventos públicos no backend e mostra em uma grade de cards.
-
-import { useEffect, useState } from 'react';
-import { api } from '../../api/api';
+import React, { useEffect, useState, useRef } from 'react';
 import type { Evento } from '../../types/Evento';
+import { endpoints } from '../../api/api';
 import EventCard from '../common/EventCard';
 import EventModal from '../common/EventModal';
-import { animarCardsAoRolar } from '../../utils/gsapAnimations';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-export default function PublicEventList() {
+interface PublicEventListProps {
+  onLoaded?: () => void;
+}
+
+const PublicEventList: React.FC<PublicEventListProps> = ({ onLoaded }) => {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState<string | null>(null);
   const [eventoSelecionado, setEventoSelecionado] = useState<Evento | null>(null);
+  const loadedCalled = useRef(false);
 
   useEffect(() => {
-    async function buscarEventos() {
+    const carregarEventos = async () => {
       try {
-        const resposta = await api.get<Evento[]>('/eventos/publicos');
+        const resposta = await endpoints.listarPublicos();
         setEventos(resposta.data);
-      } catch (err) {
-        setErro('Não foi possível carregar os eventos. Verifique se o backend está rodando.');
+        if (onLoaded && !loadedCalled.current) {
+          loadedCalled.current = true;
+          onLoaded();
+        }
+        ScrollTrigger.refresh();
+      } catch (error) {
+        console.error('Erro ao carregar eventos:', error);
+        if (onLoaded && !loadedCalled.current) {
+          loadedCalled.current = true;
+          onLoaded();
+        }
       } finally {
         setCarregando(false);
       }
-    }
-    buscarEventos();
-  }, []);
+    };
 
-  // Roda a animação de "aparecer ao rolar" só depois que os cards existem na tela.
+    carregarEventos();
+  }, [onLoaded]);
+
   useEffect(() => {
-    if (eventos.length > 0) {
-      // pequeno delay para garantir que o DOM já desenhou os cards
-      const timer = setTimeout(() => animarCardsAoRolar('.evento-card'), 50);
-      return () => clearTimeout(timer);
+    if (!carregando && eventos.length > 0) {
+      gsap.fromTo(
+        '.event-card',
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.eventos-grid',
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
     }
-  }, [eventos]);
+  }, [carregando, eventos]);
 
   if (carregando) {
     return (
-      <div className="flex min-h-[40vh] items-center justify-center">
-        <p className="animate-pulse text-[#C9A227]">Carregando eventos...</p>
-      </div>
-    );
-  }
-
-  if (erro) {
-    return (
-      <div className="mx-auto max-w-md rounded-xl border border-[#7A2E2E]/40 bg-[#7A2E2E]/10 p-6 text-center">
-        <p className="text-[#D96C6C]">{erro}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 eventos-grid" aria-live="polite" aria-busy="true">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="bg-white/5 rounded-xl h-64 animate-pulse" aria-hidden="true" />
+        ))}
+        <span className="sr-only">Carregando eventos...</span>
       </div>
     );
   }
 
   if (eventos.length === 0) {
     return (
-      <div className="flex min-h-[30vh] items-center justify-center">
-        <p className="text-[#A8A29A]">Nenhum evento em cartaz no momento. Volte em breve!</p>
+      <div className="text-center py-12 text-gray-400" aria-live="polite">
+        <p className="text-lg">🎭 Nenhum evento em cartaz no momento.</p>
+        <p className="text-sm mt-2">Volte em breve para conferir nossa programação.</p>
       </div>
     );
   }
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 eventos-grid" aria-live="polite" aria-label="Lista de eventos">
         {eventos.map((evento) => (
-          <EventCard key={evento.id} evento={evento} onClick={() => setEventoSelecionado(evento)} />
+          <EventCard
+            key={evento.id}
+            evento={evento}
+            onClick={() => setEventoSelecionado(evento)}
+          />
         ))}
       </div>
 
       {eventoSelecionado && (
-        <EventModal evento={eventoSelecionado} onFechar={() => setEventoSelecionado(null)} />
+        <EventModal
+          evento={eventoSelecionado}
+          onClose={() => setEventoSelecionado(null)}
+        />
       )}
     </>
   );
-}
+};
+
+export default PublicEventList;
