@@ -1,81 +1,121 @@
-// src/components/common/WelcomeHero.tsx
-// Tela de boas-vindas (100vh) que aparece assim que a cortina termina de abrir.
-// É só visual — não pede login nem cadastro, qualquer visitante vê isso.
-
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import { ChevronDown } from 'lucide-react';
-import {
-  revelarTituloLetraPorLetra,
-  brilharTitulo,
-  revelarSubtitulo,
-} from '../../utils/gsapAnimations';
 
-const TITULO = 'Seja muito bem-vindo ao Teatro São Carlos';
-
-interface WelcomeHeroProps {
-  // Chamado quando o visitante clica na setinha para ver os eventos.
-  onExplorar: () => void;
-}
-
-export default function WelcomeHero({ onExplorar }: WelcomeHeroProps) {
-  const jaAnimou = useRef(false);
+const WelcomeHero: React.FC = () => {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const arrowRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (jaAnimou.current) return;
-    jaAnimou.current = true;
+    // 1. Anima o fundo com um fade-in suave
+    if (containerRef.current) {
+      gsap.fromTo(
+        containerRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 1.2, ease: 'power2.out' }
+      );
+    }
 
-    // Pequeno atraso para a cortina terminar de abrir antes do texto entrar.
-    const timer = setTimeout(() => {
-      revelarTituloLetraPorLetra('.letra-titulo', () => brilharTitulo('.titulo-boas-vindas'));
-      revelarSubtitulo('.subtitulo-boas-vindas', 0.4);
-      revelarSubtitulo('.seta-explorar', 1.1);
-    }, 150);
+    // 2. Efeito de digitação no título (revelação letra por letra)
+    if (titleRef.current) {
+      const text = titleRef.current.textContent || '';
+      titleRef.current.textContent = '';
+      const chars = text.split('');
+      const tl = gsap.timeline();
 
-    return () => clearTimeout(timer);
+      chars.forEach((char) => {
+        const span = document.createElement('span');
+        span.textContent = char === ' ' ? '\u00A0' : char;
+        span.style.display = 'inline';
+        titleRef.current?.appendChild(span);
+      });
+
+      const spans = titleRef.current.querySelectorAll('span');
+      tl.fromTo(
+        spans,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, stagger: 0.04, ease: 'power2.out', duration: 0.3 }
+      )
+        .fromTo(
+          subtitleRef.current,
+          { opacity: 0, y: 15 },
+          { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+          '-=0.2'
+        )
+        .fromTo(
+          arrowRef.current,
+          { opacity: 0, y: -10 },
+          { opacity: 1, y: 0, duration: 0.6, ease: 'power1.out' },
+          '-=0.2'
+        )
+        .to(arrowRef.current, {
+          y: 8,
+          duration: 0.8,
+          repeat: -1,
+          yoyo: true,
+          ease: 'power1.inOut',
+        }, '+=0.5');
+    }
   }, []);
 
+  const scrollToEvents = () => {
+    const section = document.getElementById('eventos');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <section className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden px-6 text-center">
-      {/* O fundo (gradiente + partículas + holofote) agora vem do AtmosphereBackground,
-          que fica fixo atrás de toda a página — aqui só cuidamos do texto. */}
+    <div
+      ref={containerRef}
+      className="relative min-h-screen flex flex-col items-center justify-center px-4 text-center overflow-hidden"
+      style={{
+        backgroundImage: 'url(https://i.postimg.cc/dQ20n6Hf/Teatro-1.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* Overlay escuro para legibilidade */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
+      {/* Conteúdo */}
+      <div className="relative z-10">
+        <h1
+          ref={titleRef}
+          className="font-playfair text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight max-w-4xl mx-auto leading-tight drop-shadow-lg"
+        >
+          Bem-vindo ao Teatro Municipal
+        </h1>
 
-      {/* Título — cada letra vira um <span> para poder ser animada individualmente */}
-      <h1
-        className="titulo-boas-vindas relative max-w-3xl font-['Playfair_Display'] text-4xl font-semibold leading-tight sm:text-5xl md:text-6xl"
-        style={{
-          backgroundImage:
-            'linear-gradient(90deg, #F5F1E8 40%, #F3DE9A 48%, #C9A227 52%, #F5F1E8 60%)',
-          backgroundSize: '250% 100%',
-          WebkitBackgroundClip: 'text',
-          backgroundClip: 'text',
-          color: 'transparent',
-          perspective: '800px', // necessário para o giro (rotateX) das letras ficar visível
-        }}
-      >
-        {TITULO.split('').map((letra, i) => (
-          <span key={i} className="letra-titulo inline-block" style={{ opacity: 0 }}>
-            {letra === ' ' ? '\u00A0' : letra}
-          </span>
-        ))}
-      </h1>
+        <p
+          ref={subtitleRef}
+          className="mt-4 text-base sm:text-lg md:text-xl text-gray-200 font-light max-w-2xl mx-auto opacity-0 drop-shadow-md"
+        >
+          <span className="text-white font-medium">Cultura</span>, 
+          <span className="text-white font-medium"> arte</span> e 
+          <span className="text-white font-medium"> tradição</span> em um só lugar. 
+          Explore nossa programação e viva momentos inesquecíveis.
+        </p>
 
-      <p
-        className="subtitulo-boas-vindas mt-6 max-w-md text-base text-[#A8A29A] sm:text-lg"
-        style={{ opacity: 0 }}
-      >
-        Explore nossos espetáculos e viva momentos inesquecíveis.
-      </p>
-
-      <button
-        onClick={onExplorar}
-        className="seta-explorar group mt-14 flex flex-col items-center gap-2 text-[#C9A227] transition hover:text-[#E8C766]"
-        style={{ opacity: 0 }}
-        aria-label="Ver eventos em cartaz"
-      >
-        <span className="text-xs uppercase tracking-[0.2em]">Ver espetáculos</span>
-        <ChevronDown className="animate-bounce transition-transform group-hover:rotate-180" size={22} />
-      </button>
-    </section>
+        {/* Seta de rolagem */}
+        <div
+          ref={arrowRef}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 cursor-pointer opacity-0"
+          onClick={scrollToEvents}
+        >
+          <div className="flex flex-col items-center gap-1 text-white/60 hover:text-white/90 transition-colors">
+            <span className="text-xs uppercase tracking-widest text-white/50 font-light">
+              Explorar
+            </span>
+            <ChevronDown size={28} />
+          </div>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default WelcomeHero;

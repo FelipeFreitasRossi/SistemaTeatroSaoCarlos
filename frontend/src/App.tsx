@@ -1,25 +1,50 @@
-// src/App.tsx
-// Agora o site é 100% institucional e de página única — não existe mais
-// login nem painel administrativo, então nem precisamos de rotas.
-
+import React, { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import Home from './pages/Home';
+import Header from './components/common/Header';
+import Footer from './components/common/Footer';
+import LoadingScreen from './components/common/LoadingScreen';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simula o carregamento de recursos (pode ser substituído por loading real)
+  useEffect(() => {
+    // Se quiser um tempo mínimo de loading para a animação ser vista
+    const minLoadingTime = 2000; // 2 segundos
+    const start = Date.now();
+
+    // Simula carregamento de dados (ex: API, imagens, etc)
+    const loadResources = async () => {
+      // Aqui você pode carregar recursos reais se necessário
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    };
+
+    loadResources().then(() => {
+      const elapsed = Date.now() - start;
+      const remaining = minLoadingTime - elapsed;
+      if (remaining > 0) {
+        setTimeout(() => setIsLoading(false), remaining);
+      } else {
+        setIsLoading(false);
+      }
+    });
+  }, []);
+
   return (
     <>
-      {/* O Toaster mostra um aviso caso os eventos não consigam ser carregados */}
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          style: {
-            background: '#151318',
-            color: '#F5F1E8',
-            border: '1px solid rgba(201,162,39,0.3)',
-          },
-        }}
-      />
-      <Home />
+      {isLoading ? (
+        <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />
+      ) : (
+        <div className="min-h-screen bg-[#0B0B0B] text-white flex flex-col">
+          <Header />
+          <main className="flex-grow">
+            <Home />
+          </main>
+          <Footer />
+          <Toaster position="top-right" />
+        </div>
+      )}
     </>
   );
 }
