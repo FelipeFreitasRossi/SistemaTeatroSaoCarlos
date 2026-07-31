@@ -21,11 +21,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        // Rotas públicas (não precisam de login)
                         .requestMatchers("/api/eventos/publicos", "/api/eventos/{id}", "/health").permitAll()
-                        // Rotas administrativas (exigem login)
                         .requestMatchers("/api/eventos/admin/**").authenticated()
-                        // Qualquer outra rota exige autenticação
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
@@ -35,8 +32,8 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("GSRossi")        // NOVO USUÁRIO
-                .password(passwordEncoder().encode("patty101")) // NOVA SENHA
+        manager.createUser(User.withUsername("GSRossi")
+                .password(passwordEncoder().encode("patty101"))
                 .roles("ADMIN")
                 .build());
         return manager;
