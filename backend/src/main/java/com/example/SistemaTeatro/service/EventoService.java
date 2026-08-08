@@ -15,6 +15,7 @@ public class EventoService {
     @Autowired
     private EventoRepository eventoRepository;
 
+    // ========== CONVERSÕES ==========
     private Evento toEntity(EventoDTO dto) {
         Evento evento = new Evento();
         evento.setId(dto.getId());
@@ -26,6 +27,7 @@ public class EventoService {
         evento.setCapacidadeTotal(dto.getCapacidadeTotal());
         evento.setIngressosDisponiveis(dto.getCapacidadeTotal());
         evento.setStatus(dto.getStatus() != null ? dto.getStatus() : "BREVE");
+        evento.setLocalVendaIngressos(dto.getLocalVendaIngressos()); // <-- NOVO
         return evento;
     }
 
@@ -39,10 +41,12 @@ public class EventoService {
                 evento.getImagemUrl(),
                 evento.getCapacidadeTotal(),
                 evento.getIngressosDisponiveis(),
-                evento.getStatus()
+                evento.getStatus(),
+                evento.getLocalVendaIngressos() // <-- NOVO
         );
     }
 
+    // ========== MÉTODOS CRUD ==========
     public List<EventoDTO> listarTodos() {
         return eventoRepository.findAll().stream()
                 .map(this::toDTO)
@@ -78,6 +82,7 @@ public class EventoService {
         evento.setImagemUrl(dto.getImagemUrl());
         evento.setCapacidadeTotal(dto.getCapacidadeTotal());
         evento.setStatus(dto.getStatus());
+        evento.setLocalVendaIngressos(dto.getLocalVendaIngressos()); // <-- NOVO
 
         Evento atualizado = eventoRepository.save(evento);
         return toDTO(atualizado);

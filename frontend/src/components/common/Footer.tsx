@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { MapPin, Phone } from 'lucide-react';
 import AudioReader from './AudioReader';
 
@@ -37,14 +36,14 @@ const Footer: React.FC = () => {
               Teatro<span className="text-gray-400">Municipal</span>
             </h3>
             <p className="text-gray-500 text-sm mt-2 max-w-xs mx-auto md:mx-0">
-              Cultura, arte e tradição desde 1950.
+              Cultura, arte e tradição desde 1960.
             </p>
             <AudioReader
-              text="Teatro Municipal. Cultura, arte e tradição desde 1950."
+              text="Teatro Municipal. Cultura, arte e tradição desde 1960."
               label="Ouvir rodapé"
               className="mt-2"
             />
-          </div>
+          </div>''
 
           <div>
             <h4 className="text-white font-medium text-sm uppercase tracking-wider mb-3">Contato</h4>
@@ -55,42 +54,15 @@ const Footer: React.FC = () => {
               </div>
               <div className="flex items-center justify-center md:justify-start gap-2">
                 <Phone size={16} className="text-white/40" aria-hidden="true" />
-                <span>(16) 3371-1234</span>
+                <span>(16) 3371-4339</span>
               </div>
               {/* E-mail removido */}
             </div>
             <AudioReader
-              text="Contato: Rua 7 de Setembro, 1735, Centro. Telefone: 16 3371-1234."
+              text="Contato: Rua 7 de Setembro, 1735, Centro. Telefone: 16 3371-4339."
               label="Ouvir informações de contato"
               className="mt-2"
             />
-          </div>
-
-          <div>
-            <h4 className="text-white font-medium text-sm uppercase tracking-wider mb-3">Redes Sociais</h4>
-            <div className="flex justify-center md:justify-start gap-4">
-              <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-all duration-300 hover:scale-110"
-                aria-label="Facebook do Teatro Municipal"
-              >
-                <FaFacebook size={22} />
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-all duration-300 hover:scale-110"
-                aria-label="Instagram do Teatro Municipal"
-              >
-                <FaInstagram size={22} />
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-all duration-300 hover:scale-110"
-                aria-label="YouTube do Teatro Municipal"
-              >
-                <FaYoutube size={22} />
-              </a>
-            </div>
           </div>
         </div>
 

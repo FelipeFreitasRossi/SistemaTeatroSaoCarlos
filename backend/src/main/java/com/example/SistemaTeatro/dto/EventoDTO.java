@@ -37,4 +37,7 @@ public class EventoDTO {
     private Integer ingressosDisponiveis;
 
     private String status;
+
+    // ========== NOVO CAMPO ==========
+    private String localVendaIngressos;
 }

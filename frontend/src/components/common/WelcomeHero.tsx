@@ -134,7 +134,7 @@ const WelcomeHero: React.FC = () => {
           ref={taglineRef}
           className="mt-4 text-sm text-gray-400/80 font-light tracking-[0.15em] uppercase"
         >
-          ⋆ Desde 1950 ⋆
+          ⋆ Desde 1960 ⋆
         </div>
       </div>
 

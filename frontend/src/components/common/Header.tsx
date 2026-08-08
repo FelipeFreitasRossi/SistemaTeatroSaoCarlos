@@ -95,7 +95,7 @@ const Header: React.FC = () => {
                   Teatro<span className="text-gray-300">Municipal</span>
                 </span>
                 <div className="hidden md:block text-[10px] text-gray-400 tracking-[0.2em] font-light -mt-0.5">
-                  DESDE 1950
+                  DESDE 1960
                 </div>
               </div>
             </a>

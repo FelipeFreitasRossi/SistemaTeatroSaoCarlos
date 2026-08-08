@@ -40,4 +40,8 @@ public class Evento {
 
     @Column(nullable = false)
     private String status;
+
+    // ========== NOVO CAMPO ==========
+    @Column(length = 255)
+    private String localVendaIngressos;
 }

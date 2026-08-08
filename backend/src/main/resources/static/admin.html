@@ -4,425 +4,201 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo - Teatro Municipal</title>
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Ícones (Font Awesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* ============================================================
-           RESET & TEMA
-           ============================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* ========== RESET E ESTILOS BASE ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: #0B0B0B;
             color: #F5F5F5;
+            padding: 20px;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 0 12px;
         }
-
-        /* ============================================================
-           SCROLLBAR
-           ============================================================ */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #181818;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #444;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #666;
-        }
-
-        /* ============================================================
-           LAYOUT PRINCIPAL
-           ============================================================ */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 12px;
-            width: 100%;
-        }
-
-        /* ============================================================
-           HEADER
-           ============================================================ */
+        .container { max-width: 1200px; margin: 0 auto; }
         .header {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            margin-bottom: 24px;
-            gap: 12px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 30px;
         }
-
         .header-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
-
         .header-brand img {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             object-fit: contain;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 3px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.05);
+            padding: 4px;
+            border: 1px solid rgba(255,255,255,0.08);
         }
-
         .header-brand h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
             color: #fff;
         }
-
-        .header-brand h1 span {
-            color: #888;
-        }
-
+        .header-brand h1 span { color: #888; }
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             flex-wrap: wrap;
         }
-
         .header-actions .badge {
-            background: rgba(255, 255, 255, 0.06);
-            padding: 4px 12px;
+            background: rgba(255,255,255,0.06);
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 12px;
             color: #aaa;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-
-        /* ============================================================
-           BOTÕES
-           ============================================================ */
         .btn {
-            padding: 8px 16px;
+            padding: 10px 22px;
             border: none;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.25s ease;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            text-decoration: none;
-            white-space: nowrap;
+            gap: 8px;
         }
+        .btn-primary { background: #ffffff; color: #0B0B0B; }
+        .btn-primary:hover { background: #e0e0e0; transform: scale(1.02); }
+        .btn-success { background: #2b7a4b; color: #fff; }
+        .btn-success:hover { background: #1f5f39; }
+        .btn-warning { background: #b8860b; color: #fff; }
+        .btn-warning:hover { background: #9a7109; }
+        .btn-danger { background: #b22222; color: #fff; }
+        .btn-danger:hover { background: #8b1a1a; }
+        .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.12); color: #ccc; }
+        .btn-outline:hover { background: rgba(255,255,255,0.05); }
+        .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
 
-        .btn-primary {
-            background: #ffffff;
-            color: #0B0B0B;
-        }
-        .btn-primary:hover {
-            background: #e0e0e0;
-            transform: scale(1.02);
-        }
-
-        .btn-success {
-            background: #2b7a4b;
-            color: #fff;
-        }
-        .btn-success:hover {
-            background: #1f5f39;
-        }
-
-        .btn-warning {
-            background: #b8860b;
-            color: #fff;
-        }
-        .btn-warning:hover {
-            background: #9a7109;
-        }
-
-        .btn-danger {
-            background: #b22222;
-            color: #fff;
-        }
-        .btn-danger:hover {
-            background: #8b1a1a;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #ccc;
-        }
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .btn-sm {
-            padding: 4px 10px;
-            font-size: 11px;
-            border-radius: 6px;
-        }
-
-        /* ============================================================
-           CARDS DE ESTATÍSTICAS (DASHBOARD)
-           ============================================================ */
+        /* Cards de estatísticas */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            margin-bottom: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
         }
-
         .stat-card {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255,255,255,0.03);
             backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255,255,255,0.06);
             border-radius: 12px;
-            padding: 14px 12px;
+            padding: 18px 16px;
             text-align: center;
             transition: all 0.3s ease;
         }
         .stat-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.12);
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.12);
             transform: translateY(-2px);
         }
+        .stat-card .stat-number { font-size: 28px; font-weight: 700; color: #fff; line-height: 1.2; }
+        .stat-card .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-top: 4px; }
+        .stat-card .stat-icon { font-size: 20px; color: #888; margin-bottom: 6px; }
 
-        .stat-card .stat-number {
-            font-size: 24px;
-            font-weight: 700;
-            color: #fff;
-            line-height: 1.2;
-        }
-        .stat-card .stat-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #888;
-            margin-top: 4px;
-        }
-        .stat-card .stat-icon {
-            font-size: 18px;
-            color: #888;
-            margin-bottom: 4px;
-        }
-
-        /* ============================================================
-           TABELA
-           ============================================================ */
+        /* Tabela */
         .table-wrapper {
             overflow-x: auto;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.02);
             backdrop-filter: blur(4px);
             margin-top: 6px;
         }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-            min-width: 500px;
-        }
-
+        table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 600px; }
         th {
             text-align: left;
-            padding: 10px 12px;
-            background: rgba(255, 255, 255, 0.03);
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.03);
             color: #aaa;
             font-weight: 500;
-            font-size: 11px;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
-
-        td {
-            padding: 10px 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            vertical-align: middle;
-        }
-
-        tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
-        }
+        td { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
 
         .status-badge {
             display: inline-block;
-            padding: 3px 10px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.03em;
             border: 1px solid transparent;
         }
-        .status-breve {
-            background: rgba(255, 255, 255, 0.08);
-            color: #aaa;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        .status-cartaz {
-            background: rgba(255, 215, 0, 0.12);
-            color: #e8c766;
-            border-color: rgba(255, 215, 0, 0.15);
-        }
-        .status-encerrado {
-            background: rgba(100, 100, 100, 0.15);
-            color: #888;
-            border-color: rgba(100, 100, 100, 0.1);
-        }
-        .status-cancelado {
-            background: rgba(200, 50, 50, 0.12);
-            color: #e06666;
-            border-color: rgba(200, 50, 50, 0.15);
-        }
+        .status-breve { background: rgba(255,255,255,0.08); color: #aaa; border-color: rgba(255,255,255,0.1); }
+        .status-cartaz { background: rgba(255,215,0,0.12); color: #e8c766; border-color: rgba(255,215,0,0.15); }
+        .status-encerrado { background: rgba(100,100,100,0.15); color: #888; border-color: rgba(100,100,100,0.1); }
+        .status-cancelado { background: rgba(200,50,50,0.12); color: #e06666; border-color: rgba(200,50,50,0.15); }
 
-        .img-thumb {
-            width: 40px;
-            height: 40px;
-            object-fit: cover;
-            border-radius: 6px;
-            background: #222;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+        .img-thumb { width: 44px; height: 44px; object-fit: cover; border-radius: 6px; background: #222; border: 1px solid rgba(255,255,255,0.05); }
+        .text-truncate { max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .actions-cell { display: flex; gap: 4px; flex-wrap: wrap; }
 
-        .text-truncate {
-            max-width: 140px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .actions-cell {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        /* ============================================================
-           EMPTY STATE
-           ============================================================ */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-        }
-        .empty-state .icon {
-            font-size: 40px;
-            margin-bottom: 12px;
-            color: #444;
-        }
-        .empty-state h3 {
-            color: #aaa;
-            font-weight: 400;
-            margin-bottom: 6px;
-        }
-        .empty-state p {
-            font-size: 13px;
-            color: #555;
-        }
-
-        /* ============================================================
-           MODAL
-           ============================================================ */
+        /* Modal */
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(6px);
             z-index: 999;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 20px;
             animation: fadeOverlay 0.3s ease;
         }
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        @keyframes fadeOverlay {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
+        .modal-overlay.active { display: flex; }
+        @keyframes fadeOverlay { from { opacity: 0; } to { opacity: 1; } }
         .modal-box {
             background: #141414;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 16px;
-            max-width: 520px;
+            max-width: 540px;
             width: 100%;
-            padding: 24px 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            padding: 32px 28px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             animation: slideUp 0.35s ease;
             max-height: 90vh;
             overflow-y: auto;
         }
-
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(30px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
+        .modal-box h2 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 4px; color: #fff; }
+        .modal-box .sub { color: #888; font-size: 14px; margin-bottom: 24px; }
 
-        .modal-box h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 22px;
-            margin-bottom: 4px;
-            color: #fff;
-        }
-        .modal-box .sub {
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 14px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: #aaa;
-            margin-bottom: 4px;
-        }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; color: #aaa; margin-bottom: 4px; }
         .form-group input,
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 9px 12px;
+            padding: 10px 14px;
             background: #0B0B0B;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 8px;
             color: #f5f5f5;
-            font-size: 13px;
+            font-size: 14px;
             transition: border 0.2s, box-shadow 0.2s;
             font-family: 'Inter', sans-serif;
         }
@@ -430,315 +206,92 @@
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
         }
-        .form-group textarea {
-            resize: vertical;
-            min-height: 70px;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
         .modal-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             justify-content: flex-end;
-            margin-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 16px;
+            margin-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
             flex-wrap: wrap;
         }
 
-        /* ============================================================
-           TOAST
-           ============================================================ */
+        /* Toast */
         .toast-container {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 30px;
+            right: 30px;
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-width: 340px;
+            gap: 10px;
+            max-width: 380px;
             width: 100%;
         }
         .toast {
             background: #1a1a1a;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 12px 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 14px 20px;
             border-radius: 10px;
             color: #fff;
-            font-size: 13px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            font-size: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
             animation: slideIn 0.35s ease;
             backdrop-filter: blur(6px);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
-        .toast.success {
-            border-left: 4px solid #2b7a4b;
-        }
-        .toast.error {
-            border-left: 4px solid #b22222;
-        }
-        .toast.info {
-            border-left: 4px solid #b8860b;
-        }
-        .toast .toast-icon {
-            font-size: 18px;
-        }
-
+        .toast.success { border-left: 4px solid #2b7a4b; }
+        .toast.error { border-left: 4px solid #b22222; }
+        .toast.info { border-left: 4px solid #b8860b; }
+        .toast .toast-icon { font-size: 20px; }
         @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        /* ============================================================
-           LOGIN
-           ============================================================ */
+        /* Login */
         .login-screen {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             background: #0B0B0B;
-            padding: 16px;
+            padding: 20px;
         }
         .login-box {
             background: #141414;
-            padding: 32px 24px;
+            padding: 40px 32px;
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255,255,255,0.06);
             width: 100%;
-            max-width: 360px;
+            max-width: 380px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
         }
-        .login-box .logo {
-            width: 56px;
-            height: 56px;
-            object-fit: contain;
-            border-radius: 50%;
-            margin-bottom: 14px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .login-box h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            margin-bottom: 4px;
-            color: #fff;
-        }
-        .login-box p {
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-        .login-box input {
-            width: 100%;
-            padding: 10px 12px;
-            margin-bottom: 10px;
-            background: #0B0B0B;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 13px;
-            transition: border 0.2s;
-        }
-        .login-box input:focus {
-            outline: none;
-            border-color: rgba(255, 255, 255, 0.25);
-        }
-        .login-box .btn {
-            width: 100%;
-            justify-content: center;
-            margin-top: 4px;
-        }
-        .login-box .hint {
-            margin-top: 14px;
-            font-size: 11px;
-            color: #444;
-        }
-        .login-box .hint code {
-            background: rgba(255,255,255,0.05);
-            padding: 2px 8px;
-            border-radius: 4px;
-            color: #aaa;
-            font-size: 11px;
-        }
+        .login-box .logo { width: 60px; height: 60px; object-fit: contain; border-radius: 50%; margin-bottom: 16px; background: rgba(255,255,255,0.05); padding: 4px; border: 1px solid rgba(255,255,255,0.08); }
+        .login-box h2 { font-family: 'Playfair Display', serif; font-size: 26px; margin-bottom: 4px; color: #fff; }
+        .login-box p { color: #888; font-size: 14px; margin-bottom: 24px; }
+        .login-box input { width: 100%; padding: 12px 14px; margin-bottom: 12px; background: #0B0B0B; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff; font-size: 14px; }
+        .login-box input:focus { outline: none; border-color: rgba(255,255,255,0.25); }
+        .login-box .btn { width: 100%; justify-content: center; margin-top: 4px; }
+        .login-box .hint { margin-top: 16px; font-size: 12px; color: #444; }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
-        /* ============================================================
-           RODAPÉ COM INFORMAÇÕES DE CREDENCIAIS
-           ============================================================ */
-        .footer-cred {
-            margin-top: 30px;
-            padding: 16px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            text-align: center;
-            font-size: 12px;
-            color: #555;
-        }
-        .footer-cred code {
-            background: rgba(255,255,255,0.05);
-            padding: 2px 8px;
-            border-radius: 4px;
-            color: #888;
-            font-size: 12px;
-        }
-        .footer-cred a {
-            color: #888;
-            text-decoration: underline;
-        }
-        .footer-cred a:hover {
-            color: #fff;
-        }
+        .empty-state { text-align: center; padding: 60px 20px; color: #666; }
+        .empty-state .icon { font-size: 48px; margin-bottom: 16px; color: #444; }
+        .empty-state h3 { color: #aaa; font-weight: 400; margin-bottom: 8px; }
+        .empty-state p { font-size: 14px; color: #555; }
 
-        /* ============================================================
-           RESPONSIVIDADE
-           ============================================================ */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
-            }
-            .header-actions {
-                justify-content: space-between;
-                gap: 6px;
-                flex-wrap: wrap;
-            }
-            .header-actions .badge {
-                font-size: 10px;
-                padding: 3px 10px;
-            }
-            .btn {
-                font-size: 12px;
-                padding: 6px 12px;
-            }
-            .btn-sm {
-                font-size: 10px;
-                padding: 3px 8px;
-            }
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .modal-box {
-                padding: 18px 14px;
-            }
-            .actions-cell {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: flex-end;
-                gap: 4px;
-            }
-            .text-truncate {
-                max-width: 100px;
-            }
-            .toast-container {
-                left: 16px;
-                right: 16px;
-                bottom: 16px;
-                max-width: 100%;
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-            .stat-card {
-                padding: 10px 8px;
-            }
-            .stat-card .stat-number {
-                font-size: 20px;
-            }
-            table {
-                font-size: 12px;
-                min-width: 420px;
-            }
-            th, td {
-                padding: 8px 10px;
-            }
-            .img-thumb {
-                width: 32px;
-                height: 32px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-brand h1 {
-                font-size: 18px;
-            }
-            .header-brand img {
-                width: 30px;
-                height: 30px;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 6px;
-            }
-            .stat-card .stat-number {
-                font-size: 18px;
-            }
-            .stat-card .stat-label {
-                font-size: 8px;
-            }
-            table {
-                font-size: 11px;
-                min-width: 340px;
-            }
-            th, td {
-                padding: 6px 8px;
-            }
-            .btn {
-                font-size: 11px;
-                padding: 5px 10px;
-            }
-            .btn-sm {
-                font-size: 9px;
-                padding: 2px 6px;
-            }
-            .modal-box {
-                padding: 14px 10px;
-            }
-            .modal-box h2 {
-                font-size: 18px;
-            }
-            .login-box {
-                padding: 24px 16px;
-            }
-            .login-box h2 {
-                font-size: 20px;
-            }
-        }
-
-        /* ============================================================
-           SKELETON LOADING
-           ============================================================ */
-        .skeleton {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 8px;
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.8; }
-        }
+        .loading-spinner { text-align:center; padding:40px; color:#666; }
     </style>
 </head>
 <body>
@@ -756,12 +309,7 @@ TELA DE LOGIN
             <input type="password" id="loginPass" placeholder="Senha" value="admin123" required>
             <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
-        <p class="hint">
-            <i class="fas fa-info-circle"></i> Credenciais padrão: <code>admin</code> / <code>admin123</code>
-        </p>
-        <p class="hint" style="margin-top:6px; font-size:10px; color:#333;">
-            <i class="fas fa-edit"></i> Altere em <code>SecurityConfig.java</code>
-        </p>
+        <p class="hint">Padrão: admin / admin123</p>
     </div>
 </div>
 
@@ -770,7 +318,6 @@ PAINEL PRINCIPAL
 ============================================================ -->
 <div id="appContainer" class="container hidden">
 
-    <!-- HEADER -->
     <header class="header">
         <div class="header-brand">
             <img src="https://i.postimg.cc/j5g22R73/Theatrical-masks-set-Premium-Vector.jpg" alt="Logo">
@@ -779,7 +326,7 @@ PAINEL PRINCIPAL
         <div class="header-actions">
             <span class="badge"><i class="fas fa-lock"></i> Admin</span>
             <button class="btn btn-primary btn-sm" onclick="abrirModalCriar()">
-                <i class="fas fa-plus"></i> Novo
+                <i class="fas fa-plus"></i> Novo Evento
             </button>
             <button class="btn btn-outline btn-sm" onclick="sair()">
                 <i class="fas fa-sign-out-alt"></i> Sair
@@ -787,12 +334,11 @@ PAINEL PRINCIPAL
         </div>
     </header>
 
-    <!-- DASHBOARD: Cards de estatísticas -->
     <section class="stats-grid" id="statsGrid">
         <div class="stat-card">
             <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
             <div class="stat-number" id="totalEventos">0</div>
-            <div class="stat-label">Total</div>
+            <div class="stat-label">Total de Eventos</div>
         </div>
         <div class="stat-card">
             <div class="stat-icon"><i class="fas fa-play-circle"></i></div>
@@ -811,23 +357,16 @@ PAINEL PRINCIPAL
         </div>
     </section>
 
-    <!-- LISTA DE EVENTOS -->
     <div id="eventosContainer">
-        <div class="loading-spinner" style="text-align:center; padding:30px; color:#666;">
+        <div class="loading-spinner">
             <i class="fas fa-spinner fa-spin fa-2x"></i>
-            <p style="margin-top:10px;">Carregando eventos...</p>
+            <p style="margin-top:12px;">Carregando eventos...</p>
         </div>
-    </div>
-
-    <!-- RODAPÉ COM DICA DE CREDENCIAIS -->
-    <div class="footer-cred">
-        <i class="fas fa-key"></i> Credenciais padrão: <code>admin</code> / <code>admin123</code> &nbsp;|&nbsp;
-        <i class="fas fa-edit"></i> Altere em <code>SecurityConfig.java</code> no backend
     </div>
 </div>
 
 <!-- ============================================================
-MODAL (CRIAR / EDITAR)
+MODAL
 ============================================================ -->
 <div id="modalOverlay" class="modal-overlay">
     <div class="modal-box">
@@ -877,6 +416,17 @@ MODAL (CRIAR / EDITAR)
                 </select>
             </div>
 
+            <!-- NOVO CAMPO -->
+            <div class="form-group">
+                <label for="editLocalVenda"><i class="fas fa-ticket-alt"></i> Local de compra do ingresso</label>
+                <select id="editLocalVenda">
+                    <option value="Portaria principal">Portaria principal</option>
+                    <option value="Bilheteria">Bilheteria</option>
+                    <option value="Online">Online</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+
             <div class="modal-actions">
                 <button type="button" class="btn btn-outline" onclick="fecharModal()">Cancelar</button>
                 <button type="submit" class="btn btn-success" id="modalSubmitBtn">
@@ -887,17 +437,12 @@ MODAL (CRIAR / EDITAR)
     </div>
 </div>
 
-<!-- ============================================================
-TOAST CONTAINER
-============================================================ -->
+<!-- TOAST CONTAINER -->
 <div id="toastContainer" class="toast-container"></div>
 
-<!-- ============================================================
-SCRIPT
-============================================================ -->
 <script>
     // ============================================================
-    //  CONFIGURAÇÃO DA API
+    //  CONFIGURAÇÃO
     // ============================================================
     const API_BASE = '';
     let authToken = '';
@@ -953,9 +498,9 @@ SCRIPT
     function carregarEventos() {
         const container = document.getElementById('eventosContainer');
         container.innerHTML = `
-                <div style="text-align:center; padding:30px; color:#666;">
+                <div class="loading-spinner">
                     <i class="fas fa-spinner fa-spin fa-2x"></i>
-                    <p style="margin-top:10px;">Carregando eventos...</p>
+                    <p style="margin-top:12px;">Carregando eventos...</p>
                 </div>
             `;
 
@@ -968,7 +513,6 @@ SCRIPT
             })
             .then(eventos => {
                 atualizarEstatisticas(eventos);
-
                 if (!eventos || eventos.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
@@ -1009,7 +553,7 @@ SCRIPT
     }
 
     // ============================================================
-    //  GERAR TABELA HTML
+    //  GERAR TABELA
     // ============================================================
     function gerarTabela(eventos) {
         let html = `
@@ -1049,7 +593,7 @@ SCRIPT
                         <td>${e.local || '-'}</td>
                         <td><span class="status-badge ${statusClass}">${e.status}</span></td>
                         <td style="text-align:right;">
-                            <div class="actions-cell">
+                            <div class="actions-cell" style="justify-content:flex-end;">
                                 <button class="btn btn-warning btn-sm" onclick="abrirModalEditar(${e.id})">
                                     <i class="fas fa-edit"></i>
                                 </button>
@@ -1080,6 +624,7 @@ SCRIPT
         document.getElementById('modalForm').reset();
         document.getElementById('editCapacidade').value = 100;
         document.getElementById('editStatus').value = 'BREVE';
+        document.getElementById('editLocalVenda').value = 'Portaria principal';
         document.getElementById('modalSubmitBtn').innerHTML = '<i class="fas fa-plus"></i> Criar Evento';
         document.getElementById('modalOverlay').classList.add('active');
         setTimeout(() => document.getElementById('editTitulo').focus(), 100);
@@ -1104,6 +649,7 @@ SCRIPT
                 document.getElementById('editLocal').value = evento.local || '';
                 document.getElementById('editImagem').value = evento.imagemUrl || '';
                 document.getElementById('editStatus').value = evento.status || 'BREVE';
+                document.getElementById('editLocalVenda').value = evento.localVendaIngressos || 'Portaria principal';
                 document.getElementById('modalSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Atualizar';
                 document.getElementById('modalOverlay').classList.add('active');
                 setTimeout(() => document.getElementById('editTitulo').focus(), 100);
@@ -1118,7 +664,7 @@ SCRIPT
     }
 
     // ============================================================
-    //  SALVAR (CRIAR / ATUALIZAR)
+    //  SALVAR
     // ============================================================
     function salvarEvento(event) {
         event.preventDefault();
@@ -1132,6 +678,7 @@ SCRIPT
             local: document.getElementById('editLocal').value.trim(),
             imagemUrl: document.getElementById('editImagem').value.trim(),
             status: document.getElementById('editStatus').value,
+            localVendaIngressos: document.getElementById('editLocalVenda').value,
         };
 
         if (!dados.titulo || !dados.descricao || !dados.dataHora || !dados.local) {
@@ -1237,7 +784,7 @@ SCRIPT
         }
     });
 
-    console.log('🎭 Painel Admin carregado. Credenciais: admin/admin123');
+    console.log('🎭 Painel Admin carregado. Use admin/admin123 para entrar.');
 </script>
 </body>
 </html>

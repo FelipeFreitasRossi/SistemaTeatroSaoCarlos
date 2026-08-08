@@ -84,7 +84,7 @@ const LoadingScreen: React.FC = () => {
 
         {/* Subtítulo estático */}
         <p className="mt-2 text-xs text-gray-500 tracking-[0.2em] uppercase font-light">
-          ⋆ Desde 1950 ⋆
+          ⋆ Desde 1960 ⋆
         </p>
 
         {/* Barra de progresso */}

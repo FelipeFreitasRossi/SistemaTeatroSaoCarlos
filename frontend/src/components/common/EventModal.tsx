@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { X, Calendar, MapPin, Users } from 'lucide-react';
+import { X, Calendar, MapPin, Users, Ticket } from 'lucide-react';
 import { gsap } from 'gsap';
 import type { Evento } from '../../types/Evento';
 import AudioReader from './AudioReader';
@@ -26,7 +26,6 @@ const EventModal: React.FC<EventModalProps> = ({ evento, onClose }) => {
         { opacity: 0, scale: 0.92, y: 30 },
         { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: 'power3.out' }
       );
-      // Foco no botão de fechar
       setTimeout(() => {
         if (closeButtonRef.current) closeButtonRef.current.focus();
       }, 100);
@@ -62,7 +61,7 @@ const EventModal: React.FC<EventModalProps> = ({ evento, onClose }) => {
 
   const status = statusConfig[evento.status] || statusConfig.BREVE;
 
-  // Texto completo para leitura em voz alta
+  // Texto completo para áudio
   const textoCompleto = `
     ${evento.titulo}. 
     ${evento.descricao}. 
@@ -70,6 +69,7 @@ const EventModal: React.FC<EventModalProps> = ({ evento, onClose }) => {
     Local: ${evento.local}. 
     Capacidade: ${evento.capacidadeTotal} lugares. 
     Status: ${status.label}.
+    Local de compra do ingresso: ${evento.localVendaIngressos || 'Não informado'}.
   `;
 
   return (
@@ -86,6 +86,7 @@ const EventModal: React.FC<EventModalProps> = ({ evento, onClose }) => {
         className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-[#111111] rounded-2xl border border-white/10 shadow-2xl shadow-black/50"
         style={{ scrollbarWidth: 'thin', scrollbarColor: '#333 transparent' }}
       >
+        {/* Botão fechar */}
         <button
           ref={closeButtonRef}
           onClick={onClose}
@@ -95,6 +96,7 @@ const EventModal: React.FC<EventModalProps> = ({ evento, onClose }) => {
           <X size={18} />
         </button>
 
+        {/* Imagem de capa */}
         <div className="relative w-full h-56 md:h-64 overflow-hidden rounded-t-2xl">
           {evento.imagemUrl ? (
             <img
@@ -115,8 +117,9 @@ const EventModal: React.FC<EventModalProps> = ({ evento, onClose }) => {
           </div>
         </div>
 
+        {/* Conteúdo */}
         <div className="p-6 md:p-8 space-y-5">
-          {/* Título + Botão Ouvir */}
+          {/* Título + botão de áudio */}
           <div className="flex items-start justify-between gap-4">
             <h2 id="modal-title" className="font-playfair text-2xl md:text-3xl font-bold text-white leading-tight">
               {evento.titulo}
@@ -134,7 +137,8 @@ const EventModal: React.FC<EventModalProps> = ({ evento, onClose }) => {
             {evento.descricao}
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+          {/* Grid de informações – incluindo o novo campo */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <div className="bg-white/5 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-colors">
               <div className="flex items-start gap-3">
                 <Calendar className="text-white/50 mt-0.5" size={18} aria-hidden="true" />
@@ -162,8 +166,21 @@ const EventModal: React.FC<EventModalProps> = ({ evento, onClose }) => {
                 </div>
               </div>
             </div>
+            {/* ========== NOVO CAMPO ========== */}
+            <div className="bg-white/5 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-colors">
+              <div className="flex items-start gap-3">
+                <Ticket className="text-white/50 mt-0.5" size={18} aria-hidden="true" />
+                <div>
+                  <p className="text-[10px] text-gray-500 uppercase tracking-wider">Compra de ingressos</p>
+                  <p className="text-sm text-white font-medium">
+                    {evento.localVendaIngressos || 'Não informado'}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
+          {/* Botão fechar */}
           <div className="pt-4 border-t border-white/10">
             <button
               onClick={onClose}
